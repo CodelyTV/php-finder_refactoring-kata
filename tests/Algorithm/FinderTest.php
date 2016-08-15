@@ -38,38 +38,38 @@ final class FinderTest extends TestCase
     )
     {
         $allPersons = [];
-        $finder     = new Finder($allPersons);
+        $finder     = new Finder();
 
         $this->expectException(NotEnoughPersonsException::class);
 
         $closestBirthDatePersonsPairsCriteria = new ClosestBirthDateCriteria();
 
-        $finder->find($closestBirthDatePersonsPairsCriteria);
+        $finder->find($allPersons, $closestBirthDatePersonsPairsCriteria);
     }
 
     /** @test */
     public function should_throw_not_enough_persons_when_given_one_person()
     {
         $allPersons = [$this->sue];
-        $finder     = new Finder($allPersons);
+        $finder     = new Finder();
 
         $this->expectException(NotEnoughPersonsException::class);
 
         $closestBirthDatePersonsPairsCriteria = new ClosestBirthDateCriteria();
 
-        $finder->find($closestBirthDatePersonsPairsCriteria);
+        $finder->find($allPersons, $closestBirthDatePersonsPairsCriteria);
     }
 
     /** @test */
     public function should_return_closest_two_for_two_people()
     {
         $allPersons = [$this->sue, $this->greg];
-        $finder     = new Finder($allPersons);
+        $finder     = new Finder();
 
         $closestBirthDatePersonsPairsCriteria = new ClosestBirthDateCriteria();
 
         $personsPairFound =
-            $finder->find($closestBirthDatePersonsPairsCriteria);
+            $finder->find($allPersons, $closestBirthDatePersonsPairsCriteria);
 
         $this->assertEquals($this->sue, $personsPairFound->person1());
         $this->assertEquals($this->greg, $personsPairFound->person2());
@@ -79,13 +79,13 @@ final class FinderTest extends TestCase
     public function should_return_furthest_two_for_two_people()
     {
         $allPersons = [$this->mike, $this->greg];
-        $finder     = new Finder($allPersons);
+        $finder     = new Finder();
 
         $furthestBirthDatePersonsPairsCriteria =
             new FurthestBirthDateCriteria();
 
         $personsPairFound =
-            $finder->find($furthestBirthDatePersonsPairsCriteria);
+            $finder->find($allPersons, $furthestBirthDatePersonsPairsCriteria);
 
         $this->assertEquals($this->greg, $personsPairFound->person1());
         $this->assertEquals($this->mike, $personsPairFound->person2());
@@ -95,13 +95,13 @@ final class FinderTest extends TestCase
     public function should_return_furthest_two_for_four_people()
     {
         $allPersons = [$this->sue, $this->sarah, $this->mike, $this->greg];
-        $finder     = new Finder($allPersons);
+        $finder     = new Finder();
 
         $furthestBirthDatePersonsPairsCriteria =
             new FurthestBirthDateCriteria();
 
         $personsPairFound =
-            $finder->find($furthestBirthDatePersonsPairsCriteria);
+            $finder->find($allPersons, $furthestBirthDatePersonsPairsCriteria);
 
         $this->assertEquals($this->sue, $personsPairFound->person1());
         $this->assertEquals($this->sarah, $personsPairFound->person2());
@@ -111,12 +111,12 @@ final class FinderTest extends TestCase
     public function should_return_closest_two_for_four_people()
     {
         $allPersons = [$this->sue, $this->sarah, $this->mike, $this->greg];
-        $finder     = new Finder($allPersons);
+        $finder     = new Finder();
 
         $closestBirthDatePersonsPairsCriteria = new ClosestBirthDateCriteria();
 
         $personsPairFound =
-            $finder->find($closestBirthDatePersonsPairsCriteria);
+            $finder->find($allPersons, $closestBirthDatePersonsPairsCriteria);
 
         $this->assertEquals($this->sue, $personsPairFound->person1());
         $this->assertEquals($this->greg, $personsPairFound->person2());

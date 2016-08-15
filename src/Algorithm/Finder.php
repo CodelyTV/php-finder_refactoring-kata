@@ -8,25 +8,19 @@ use CodelyTV\FinderKata\Domain\Model\PersonsPair\PersonsPairCriteria;
 
 final class Finder
 {
-    /** @var Person[] */
-    private $allPersons;
-
-    public function __construct(array $allPersons)
-    {
-        $this->allPersons = $allPersons;
-    }
-
     /**
+     * @param Person[]            $allPersons
      * @param PersonsPairCriteria $finderCriteria
      *
      * @return PersonsPair The pair of persons matching the specified
      *                     $finderCriteria
-     *
-     * @throws NotEnoughPersonsException
      */
-    public function find(PersonsPairCriteria $finderCriteria): PersonsPair
+    public function find(
+        array $allPersons,
+        PersonsPairCriteria $finderCriteria
+    ): PersonsPair
     {
-        $allPersonsPairs = $this->pairAllPersons($this->allPersons);
+        $allPersonsPairs = $this->pairAllPersons($allPersons);
 
         $this->validateThereAreEnoughPersonsPairs($allPersonsPairs);
 
@@ -56,8 +50,8 @@ final class Finder
                 $personToPairIteration < $numberOfPersons;
                 $personToPairIteration++) {
 
-                $currentPerson = $this->allPersons[$currentPersonIteration];
-                $personToPair  = $this->allPersons[$personToPairIteration];
+                $currentPerson = $allPersons[$currentPersonIteration];
+                $personToPair  = $allPersons[$personToPairIteration];
 
                 if ($currentPerson->birthDate() < $personToPair->birthDate()) {
                     $allPersonsPairs[] =
