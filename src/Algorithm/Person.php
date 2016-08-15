@@ -9,28 +9,24 @@ use DateTime;
 final class Person
 {
     /** @var string */
-    public $name;
+    private $name;
 
     /** @var DateTime */
-    public $birthDate;
+    private $birthDate;
 
-    public function getName(): string
+    public function __construct(string $aName, DateTime $aBirthDate)
+    {
+        $this->name      = $aName;
+        $this->birthDate = $aBirthDate;
+    }
+
+    public function name(): string
     {
         return $this->name;
     }
 
-    public function setName(string $name)
-    {
-        $this->name = $name;
-    }
-
-    public function getBirthDate(): DateTime
+    public function birthDate(): DateTime
     {
         return $this->birthDate;
-    }
-
-    public function setBirthDate(DateTime $birthDate)
-    {
-        $this->birthDate = $birthDate;
     }
 }

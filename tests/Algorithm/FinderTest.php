@@ -6,6 +6,7 @@ namespace CodelyTV\FinderKataTest\Algorithm;
 
 use CodelyTV\FinderKata\Algorithm\Finder;
 use CodelyTV\FinderKata\Algorithm\FinderCriteria;
+use CodelyTV\FinderKata\Algorithm\NotEnoughPersonsException;
 use CodelyTV\FinderKata\Algorithm\Person;
 use PHPUnit\Framework\TestCase;
 
@@ -25,45 +26,33 @@ final class FinderTest extends TestCase
 
     protected function setUp()
     {
-        $this->sue            = new Person();
-        $this->sue->name      = "Sue";
-        $this->sue->birthDate = new \DateTime("1950-01-01");
-
-        $this->greg            = new Person();
-        $this->greg->name      = "Greg";
-        $this->greg->birthDate = new \DateTime("1952-05-01");
-
-        $this->sarah            = new Person();
-        $this->sarah->name      = "Sarah";
-        $this->sarah->birthDate = new \DateTime("1982-01-01");
-
-        $this->mike            = new Person();
-        $this->mike->name      = "Mike";
-        $this->mike->birthDate = new \DateTime("1979-01-01");
+        $this->sue   = new Person("Sue", new \DateTime("1950-01-01"));
+        $this->greg  = new Person("Greg", new \DateTime("1952-05-01"));
+        $this->sarah = new Person("Sarah", new \DateTime("1982-01-01"));
+        $this->mike  = new Person("Mike", new \DateTime("1979-01-01"));
     }
 
     /** @test */
-    public function should_return_empty_when_given_empty_list()
+    public function should_throw_not_enough_persons_exception_when_given_empty_list(
+    )
     {
         $allPersons = [];
         $finder     = new Finder($allPersons);
 
-        $result = $finder->find(FinderCriteria::CLOSEST_BIRTHDAYS);
+        $this->expectException(NotEnoughPersonsException::class);
 
-        $this->assertEquals(null, $result->person1);
-        $this->assertEquals(null, $result->person2);
+        $finder->find(FinderCriteria::CLOSEST_BIRTHDAYS);
     }
 
     /** @test */
-    public function should_return_empty_when_given_one_person()
+    public function should_throw_not_enough_persons_when_given_one_person()
     {
         $allPersons = [$this->sue];
         $finder     = new Finder($allPersons);
 
-        $result = $finder->find(FinderCriteria::CLOSEST_BIRTHDAYS);
+        $this->expectException(NotEnoughPersonsException::class);
 
-        $this->assertEquals(null, $result->person1);
-        $this->assertEquals(null, $result->person2);
+        $finder->find(FinderCriteria::CLOSEST_BIRTHDAYS);
     }
 
     /** @test */
@@ -72,10 +61,10 @@ final class FinderTest extends TestCase
         $allPersons = [$this->sue, $this->greg];
         $finder     = new Finder($allPersons);
 
-        $result = $finder->find(FinderCriteria::CLOSEST_BIRTHDAYS);
+        $personsPairFound = $finder->find(FinderCriteria::CLOSEST_BIRTHDAYS);
 
-        $this->assertEquals($this->sue, $result->person1);
-        $this->assertEquals($this->greg, $result->person2);
+        $this->assertEquals($this->sue, $personsPairFound->person1());
+        $this->assertEquals($this->greg, $personsPairFound->person2());
     }
 
     /** @test */
@@ -84,10 +73,10 @@ final class FinderTest extends TestCase
         $allPersons = [$this->mike, $this->greg];
         $finder     = new Finder($allPersons);
 
-        $result = $finder->find(FinderCriteria::FURTHEST_BIRTHDAYS);
+        $personsPairFound = $finder->find(FinderCriteria::FURTHEST_BIRTHDAYS);
 
-        $this->assertEquals($this->greg, $result->person1);
-        $this->assertEquals($this->mike, $result->person2);
+        $this->assertEquals($this->greg, $personsPairFound->person1());
+        $this->assertEquals($this->mike, $personsPairFound->person2());
     }
 
     /** @test */
@@ -96,10 +85,10 @@ final class FinderTest extends TestCase
         $allPersons = [$this->sue, $this->sarah, $this->mike, $this->greg];
         $finder     = new Finder($allPersons);
 
-        $result = $finder->find(FinderCriteria::FURTHEST_BIRTHDAYS);
+        $personsPairFound = $finder->find(FinderCriteria::FURTHEST_BIRTHDAYS);
 
-        $this->assertEquals($this->sue, $result->person1);
-        $this->assertEquals($this->sarah, $result->person2);
+        $this->assertEquals($this->sue, $personsPairFound->person1());
+        $this->assertEquals($this->sarah, $personsPairFound->person2());
     }
 
     /** @test */
@@ -108,9 +97,9 @@ final class FinderTest extends TestCase
         $allPersons = [$this->sue, $this->sarah, $this->mike, $this->greg];
         $finder     = new Finder($allPersons);
 
-        $result = $finder->find(FinderCriteria::CLOSEST_BIRTHDAYS);
+        $personsPairFound = $finder->find(FinderCriteria::CLOSEST_BIRTHDAYS);
 
-        $this->assertEquals($this->sue, $result->person1);
-        $this->assertEquals($this->greg, $result->person2);
+        $this->assertEquals($this->sue, $personsPairFound->person1());
+        $this->assertEquals($this->greg, $personsPairFound->person2());
     }
 }

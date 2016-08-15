@@ -23,21 +23,18 @@ final class Finder
 
         for ($i = 0; $i < $numberOfPersons; $i++) {
             for ($j = $i + 1; $j < $numberOfPersons; $j++) {
-                $personsPair = new PersonsPair();
 
-                if ($this->allPersons[$i]->birthDate
-                    < $this->allPersons[$j]->birthDate
+                if ($this->allPersons[$i]->birthDate()
+                    < $this->allPersons[$j]->birthDate()
                 ) {
-                    $personsPair->person1 = $this->allPersons[$i];
-                    $personsPair->person2 = $this->allPersons[$j];
+                    $personsPair = new PersonsPair(
+                        $this->allPersons[$i], $this->allPersons[$j]
+                    );
                 } else {
-                    $personsPair->person1 = $this->allPersons[$j];
-                    $personsPair->person2 = $this->allPersons[$i];
+                    $personsPair = new PersonsPair(
+                        $this->allPersons[$j], $this->allPersons[$i]
+                    );
                 }
-
-                $personsPair->birthDaysDistanceInSeconds =
-                    $personsPair->person2->birthDate->getTimestamp()
-                    - $personsPair->person1->birthDate->getTimestamp();
 
                 $allPersonsPairs[] = $personsPair;
             }
@@ -45,7 +42,7 @@ final class Finder
 
         $thereAreNoPersonsPairs = count($allPersonsPairs) < 1;
         if ($thereAreNoPersonsPairs) {
-            return new PersonsPair();
+            throw new NotEnoughPersonsException();
         }
 
         $personsPairMatchingCriteria = $allPersonsPairs[0];
@@ -53,16 +50,18 @@ final class Finder
         foreach ($allPersonsPairs as $personsPair) {
             switch ($finderCriteria) {
                 case FinderCriteria::CLOSEST_BIRTHDAYS:
-                    if ($personsPair->birthDaysDistanceInSeconds
-                        < $personsPairMatchingCriteria->birthDaysDistanceInSeconds
+                    if ($personsPair->birthDaysDistanceInSeconds()
+                        < $personsPairMatchingCriteria->birthDaysDistanceInSeconds(
+                        )
                     ) {
                         $personsPairMatchingCriteria = $personsPair;
                     }
                     break;
 
                 case FinderCriteria::FURTHEST_BIRTHDAYS:
-                    if ($personsPair->birthDaysDistanceInSeconds
-                        > $personsPairMatchingCriteria->birthDaysDistanceInSeconds
+                    if ($personsPair->birthDaysDistanceInSeconds()
+                        > $personsPairMatchingCriteria->birthDaysDistanceInSeconds(
+                        )
                     ) {
                         $personsPairMatchingCriteria = $personsPair;
                     }
