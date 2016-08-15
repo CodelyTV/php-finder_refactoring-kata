@@ -71,18 +71,14 @@ final class FinderTest extends TestCase
     /** @test */
     public function should_throw_not_enough_persons_when_given_one_person()
     {
-        $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
-        $sequentialPersonsPairer        =
-            new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
-        $finder                         = new Finder($sequentialPersonsPairer);
+        $this->havingAPersonsPairer();
 
-        $allPersons = [$this->sue];
+        $this->givenASetWithOnePerson();
+        $this->givenAClosestBirthDateCriteria();
 
-        $this->expectException(NotEnoughPersonsException::class);
+        $this->thenItShouldThrowANotEnoughPersonsException();
 
-        $closestBirthDatePersonsPairsCriteria = new ClosestBirthDateCriteria();
-
-        $finder->find($allPersons, $closestBirthDatePersonsPairsCriteria);
+        $this->whenFinderIsCalled();
     }
 
     /** @test */
@@ -179,6 +175,11 @@ final class FinderTest extends TestCase
     private function givenAnEmptySetOfPersons()
     {
         $this->allPersons = [];
+    }
+
+    private function givenASetWithOnePerson()
+    {
+        $this->allPersons = [$this->sue];
     }
 
     private function givenAClosestBirthDateCriteria()
