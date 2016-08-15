@@ -14,37 +14,88 @@ final class Finder
         $this->allPersons = $allPersons;
     }
 
+    /**
+     * @param FinderCriteria $finderCriteria
+     *
+     * @return PersonsPair The pair of persons matching the specified
+     *                     $finderCriteria
+     *
+     * @throws NotEnoughPersonsException
+     */
     public function find(FinderCriteria $finderCriteria): PersonsPair
     {
-        /** @var PersonsPair[] $allPersonsPairs */
+        $allPersonsPairs = $this->pairAllPersons($this->allPersons);
+
+        $this->validateThereAreEnoughPersonsPairs($allPersonsPairs);
+
+        $personsPairMatchingCriteria = $this->findPersonsPairMatchingCriteria(
+            $finderCriteria,
+            $allPersonsPairs
+        );
+
+        return $personsPairMatchingCriteria;
+    }
+
+    /**
+     * @param Person[] $allPersons
+     *
+     * @return PersonsPair[]
+     */
+    private function pairAllPersons(array $allPersons): array
+    {
         $allPersonsPairs = [];
 
-        $numberOfPersons = count($this->allPersons);
+        $numberOfPersons = count($allPersons);
 
-        for ($i = 0; $i < $numberOfPersons; $i++) {
-            for ($j = $i + 1; $j < $numberOfPersons; $j++) {
+        for ($currentPersonIteration = 0;
+            $currentPersonIteration < $numberOfPersons;
+            $currentPersonIteration++) {
+            for ($personToPairIteration = $currentPersonIteration + 1;
+                $personToPairIteration < $numberOfPersons;
+                $personToPairIteration++) {
 
-                if ($this->allPersons[$i]->birthDate()
-                    < $this->allPersons[$j]->birthDate()
-                ) {
-                    $personsPair = new PersonsPair(
-                        $this->allPersons[$i], $this->allPersons[$j]
-                    );
+                $currentPerson = $this->allPersons[$currentPersonIteration];
+                $personToPair  = $this->allPersons[$personToPairIteration];
+
+                if ($currentPerson->birthDate() < $personToPair->birthDate()) {
+                    $allPersonsPairs[] =
+                        new PersonsPair($currentPerson, $personToPair);
                 } else {
-                    $personsPair = new PersonsPair(
-                        $this->allPersons[$j], $this->allPersons[$i]
-                    );
+                    $allPersonsPairs[] =
+                        new PersonsPair($personToPair, $currentPerson);
                 }
-
-                $allPersonsPairs[] = $personsPair;
             }
         }
 
+        return $allPersonsPairs;
+    }
+
+    /**
+     * @param PersonsPair[] $allPersonsPairs
+     *
+     * @return void
+     *
+     * @throws NotEnoughPersonsException
+     */
+    private function validateThereAreEnoughPersonsPairs(array $allPersonsPairs)
+    {
         $thereAreNoPersonsPairs = count($allPersonsPairs) < 1;
         if ($thereAreNoPersonsPairs) {
             throw new NotEnoughPersonsException();
         }
+    }
 
+    /**
+     * @param FinderCriteria $finderCriteria
+     * @param PersonsPair[]  $allPersonsPairs
+     *
+     * @return PersonsPair
+     */
+    private function findPersonsPairMatchingCriteria(
+        FinderCriteria $finderCriteria,
+        array $allPersonsPairs
+    ): PersonsPair
+    {
         $personsPairMatchingCriteria = $allPersonsPairs[0];
 
         foreach ($allPersonsPairs as $personsPair) {
