@@ -5,9 +5,18 @@ declare(strict_types = 1);
 namespace CodelyTV\FinderKata\Algorithm;
 
 use CodelyTV\FinderKata\Domain\Model\PersonsPair\PersonsPairCriteria;
+use CodelyTV\FinderKata\Domain\Service\PersonsPair\PersonsPairer;
 
 final class Finder
 {
+    /** @var PersonsPairer */
+    private $personsPairer;
+
+    public function __construct(PersonsPairer $aPersonsPairer)
+    {
+        $this->personsPairer = $aPersonsPairer;
+    }
+
     /**
      * @param Person[]            $allPersons
      * @param PersonsPairCriteria $finderCriteria
@@ -20,7 +29,7 @@ final class Finder
         PersonsPairCriteria $finderCriteria
     ): PersonsPair
     {
-        $allPersonsPairs = $this->pairAllPersons($allPersons);
+        $allPersonsPairs = $this->personsPairer->pair($allPersons);
 
         $this->validateThereAreEnoughPersonsPairs($allPersonsPairs);
 
@@ -30,40 +39,6 @@ final class Finder
         );
 
         return $personsPairMatchingCriteria;
-    }
-
-    /**
-     * @param Person[] $allPersons
-     *
-     * @return PersonsPair[]
-     */
-    private function pairAllPersons(array $allPersons): array
-    {
-        $allPersonsPairs = [];
-
-        $numberOfPersons = count($allPersons);
-
-        for ($currentPersonIteration = 0;
-            $currentPersonIteration < $numberOfPersons;
-            $currentPersonIteration++) {
-            for ($personToPairIteration = $currentPersonIteration + 1;
-                $personToPairIteration < $numberOfPersons;
-                $personToPairIteration++) {
-
-                $currentPerson = $allPersons[$currentPersonIteration];
-                $personToPair  = $allPersons[$personToPairIteration];
-
-                if ($currentPerson->birthDate() < $personToPair->birthDate()) {
-                    $allPersonsPairs[] =
-                        new PersonsPair($currentPerson, $personToPair);
-                } else {
-                    $allPersonsPairs[] =
-                        new PersonsPair($personToPair, $currentPerson);
-                }
-            }
-        }
-
-        return $allPersonsPairs;
     }
 
     /**
