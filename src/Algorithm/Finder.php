@@ -14,7 +14,7 @@ final class Finder
         $this->allPersons = $allPersons;
     }
 
-    public function find(int $finderCriteria): PersonsPair
+    public function find(FinderCriteria $finderCriteria): PersonsPair
     {
         /** @var PersonsPair[] $allPersonsPairs */
         $allPersonsPairs = [];
@@ -48,24 +48,18 @@ final class Finder
         $personsPairMatchingCriteria = $allPersonsPairs[0];
 
         foreach ($allPersonsPairs as $personsPair) {
-            switch ($finderCriteria) {
-                case FinderCriteria::CLOSEST_BIRTHDAYS:
-                    if ($personsPair->birthDaysDistanceInSeconds()
-                        < $personsPairMatchingCriteria->birthDaysDistanceInSeconds(
-                        )
-                    ) {
-                        $personsPairMatchingCriteria = $personsPair;
-                    }
-                    break;
-
-                case FinderCriteria::FURTHEST_BIRTHDAYS:
-                    if ($personsPair->birthDaysDistanceInSeconds()
-                        > $personsPairMatchingCriteria->birthDaysDistanceInSeconds(
-                        )
-                    ) {
-                        $personsPairMatchingCriteria = $personsPair;
-                    }
-                    break;
+            if ($finderCriteria->isByClosestBirthDates()) {
+                if ($personsPair->birthDaysDistanceInSeconds()
+                    < $personsPairMatchingCriteria->birthDaysDistanceInSeconds()
+                ) {
+                    $personsPairMatchingCriteria = $personsPair;
+                }
+            } elseif ($finderCriteria->isByFurthestBirthDates()) {
+                if ($personsPair->birthDaysDistanceInSeconds()
+                    > $personsPairMatchingCriteria->birthDaysDistanceInSeconds()
+                ) {
+                    $personsPairMatchingCriteria = $personsPair;
+                }
             }
         }
 
