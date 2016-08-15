@@ -9,6 +9,8 @@ use CodelyTV\FinderKata\Algorithm\NotEnoughPersonsException;
 use CodelyTV\FinderKata\Algorithm\Person;
 use CodelyTV\FinderKata\Domain\Model\PersonsPair\ClosestBirthDateCriteria;
 use CodelyTV\FinderKata\Domain\Model\PersonsPair\FurthestBirthDateCriteria;
+use CodelyTV\FinderKata\Domain\Model\PersonsPair\PersonsPairCriteria;
+use CodelyTV\FinderKata\Domain\Service\PersonsPair\PersonsPairer;
 use CodelyTV\FinderKata\Domain\Service\PersonsPair\SequentialPersonsPairer;
 use CodelyTV\FinderKata\Domain\Service\PersonsPair\YoungerFirstPersonsPairFactory;
 use PHPUnit\Framework\TestCase;
@@ -35,22 +37,35 @@ final class FinderTest extends TestCase
         $this->mike  = new Person("Mike", new \DateTime("1979-01-01"));
     }
 
+    /** @var PersonsPairer */
+    private $personsPairer;
+
+    /** @var Person[] */
+    private $allPersons;
+
+    /** @var PersonsPairCriteria */
+    private $personsPairsCriteria;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->personsPairer = null;
+        $this->allPersons = null;
+    }
+
     /** @test */
     public function should_throw_not_enough_persons_exception_when_given_empty_list(
     )
     {
-        $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
-        $sequentialPersonsPairer        =
-            new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
-        $finder                         = new Finder($sequentialPersonsPairer);
+        $this->havingAPersonsPairer();
 
-        $allPersons = [];
+        $this->givenAnEmptySetOfPersons();
+        $this->givenAClosestBirthDateCriteria();
 
-        $this->expectException(NotEnoughPersonsException::class);
+        $this->thenItShouldThrowANotEnoughPersonsException();
 
-        $closestBirthDatePersonsPairsCriteria = new ClosestBirthDateCriteria();
-
-        $finder->find($allPersons, $closestBirthDatePersonsPairsCriteria);
+        $this->whenFinderIsCalled();
     }
 
     /** @test */
@@ -59,7 +74,7 @@ final class FinderTest extends TestCase
         $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
         $sequentialPersonsPairer        =
             new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
-        $finder                  = new Finder($sequentialPersonsPairer);
+        $finder                         = new Finder($sequentialPersonsPairer);
 
         $allPersons = [$this->sue];
 
@@ -76,7 +91,7 @@ final class FinderTest extends TestCase
         $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
         $sequentialPersonsPairer        =
             new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
-        $finder                  = new Finder($sequentialPersonsPairer);
+        $finder                         = new Finder($sequentialPersonsPairer);
 
         $allPersons = [$this->sue, $this->greg];
 
@@ -95,7 +110,7 @@ final class FinderTest extends TestCase
         $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
         $sequentialPersonsPairer        =
             new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
-        $finder                  = new Finder($sequentialPersonsPairer);
+        $finder                         = new Finder($sequentialPersonsPairer);
 
         $allPersons = [$this->mike, $this->greg];
 
@@ -115,7 +130,7 @@ final class FinderTest extends TestCase
         $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
         $sequentialPersonsPairer        =
             new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
-        $finder                  = new Finder($sequentialPersonsPairer);
+        $finder                         = new Finder($sequentialPersonsPairer);
 
         $allPersons = [$this->sue, $this->sarah, $this->mike, $this->greg];
 
@@ -135,7 +150,7 @@ final class FinderTest extends TestCase
         $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
         $sequentialPersonsPairer        =
             new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
-        $finder                  = new Finder($sequentialPersonsPairer);
+        $finder                         = new Finder($sequentialPersonsPairer);
 
         $allPersons = [$this->sue, $this->sarah, $this->mike, $this->greg];
 
@@ -146,5 +161,48 @@ final class FinderTest extends TestCase
 
         $this->assertEquals($this->sue, $personsPairFound->person1());
         $this->assertEquals($this->greg, $personsPairFound->person2());
+    }
+
+    /*
+     * Havings
+     */
+
+    private function havingAPersonsPairer()
+    {
+        $this->personsPairer = $this->createMock(PersonsPairer::class);
+    }
+
+    /*
+     * Given
+     */
+
+    private function givenAnEmptySetOfPersons()
+    {
+        $this->allPersons = [];
+    }
+
+    private function givenAClosestBirthDateCriteria()
+    {
+        $this->personsPairsCriteria = new ClosestBirthDateCriteria();
+    }
+
+    /*
+     * Thens
+     */
+
+    private function thenItShouldThrowANotEnoughPersonsException()
+    {
+        $this->expectException(NotEnoughPersonsException::class);
+    }
+
+    /*
+     * Whens
+     */
+
+    private function whenFinderIsCalled()
+    {
+        $finder = new Finder($this->personsPairer);
+
+        $finder->find($this->allPersons, $this->personsPairsCriteria);
     }
 }
