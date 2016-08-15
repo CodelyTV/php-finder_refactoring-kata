@@ -6,60 +6,70 @@ namespace CodelyTV\FinderKata\Algorithm;
 
 final class Finder
 {
-    /** @var Thing[] */
-    private $_p;
+    /** @var Person[] */
+    private $allPersons;
 
-    public function __construct(array $p)
+    public function __construct(array $allPersons)
     {
-        $this->_p = $p;
+        $this->allPersons = $allPersons;
     }
 
-    public function find(int $ft): F
+    public function find(int $finderCriteria): PersonsPair
     {
-        /** @var F[] $tr */
-        $tr = [];
+        /** @var PersonsPair[] $allPersonsPairs */
+        $allPersonsPairs = [];
 
-        for ($i = 0; $i < count($this->_p); $i++) {
-            for ($j = $i + 1; $j < count($this->_p); $j++) {
-                $r = new F();
+        $numberOfPersons = count($this->allPersons);
 
-                if ($this->_p[$i]->birthDate < $this->_p[$j]->birthDate) {
-                    $r->p1 = $this->_p[$i];
-                    $r->p2 = $this->_p[$j];
+        for ($i = 0; $i < $numberOfPersons; $i++) {
+            for ($j = $i + 1; $j < $numberOfPersons; $j++) {
+                $personsPair = new PersonsPair();
+
+                if ($this->allPersons[$i]->birthDate
+                    < $this->allPersons[$j]->birthDate
+                ) {
+                    $personsPair->person1 = $this->allPersons[$i];
+                    $personsPair->person2 = $this->allPersons[$j];
                 } else {
-                    $r->p1 = $this->_p[$j];
-                    $r->p2 = $this->_p[$i];
+                    $personsPair->person1 = $this->allPersons[$j];
+                    $personsPair->person2 = $this->allPersons[$i];
                 }
 
-                $r->d = $r->p2->birthDate->getTimestamp()
-                    - $r->p1->birthDate->getTimestamp();
+                $personsPair->birthDaysDistanceInSeconds =
+                    $personsPair->person2->birthDate->getTimestamp()
+                    - $personsPair->person1->birthDate->getTimestamp();
 
-                $tr[] = $r;
+                $allPersonsPairs[] = $personsPair;
             }
         }
 
-        if (count($tr) < 1) {
-            return new F();
+        $thereAreNoPersonsPairs = count($allPersonsPairs) < 1;
+        if ($thereAreNoPersonsPairs) {
+            return new PersonsPair();
         }
 
-        $answer = $tr[0];
+        $personsPairMatchingCriteria = $allPersonsPairs[0];
 
-        foreach ($tr as $result) {
-            switch ($ft) {
-                case FT::ONE:
-                    if ($result->d < $answer->d) {
-                        $answer = $result;
+        foreach ($allPersonsPairs as $personsPair) {
+            switch ($finderCriteria) {
+                case FinderCriteria::CLOSEST_BIRTHDAYS:
+                    if ($personsPair->birthDaysDistanceInSeconds
+                        < $personsPairMatchingCriteria->birthDaysDistanceInSeconds
+                    ) {
+                        $personsPairMatchingCriteria = $personsPair;
                     }
                     break;
 
-                case FT::TWO:
-                    if ($result->d > $answer->d) {
-                        $answer = $result;
+                case FinderCriteria::FURTHEST_BIRTHDAYS:
+                    if ($personsPair->birthDaysDistanceInSeconds
+                        > $personsPairMatchingCriteria->birthDaysDistanceInSeconds
+                    ) {
+                        $personsPairMatchingCriteria = $personsPair;
                     }
                     break;
             }
         }
 
-        return $answer;
+        return $personsPairMatchingCriteria;
     }
 }
