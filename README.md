@@ -56,7 +56,12 @@ I've decided to port the kata directly to PHP 7 instead of 5.6. This will allow 
 
 # Credits and other programming languages
 
-This kata is a PHP port of the original Incomprehensible Finder Refactoring Kata created by [K. Scott Allen](https://github.com/OdeToCode). You can also find [the kata in Java](https://github.com/OdeToCode/Katas/tree/master/Refactoring/Java) and [in C#](https://github.com/OdeToCode/Katas/tree/master/Refactoring/CS).
+This kata is a PHP port of [the original Incomprehensible Finder Refactoring Kata](https://github.com/OdeToCode/Katas/tree/master/Refactoring) created by [K. Scott Allen](https://github.com/OdeToCode).
+
+You can also find the kata in different programming languages in isolated repositories just ready to clone and enjoy: 
+* [Java](https://github.com/DoDevJutsu/incomprehensible-finder-refactoring-java)
+* [C#](https://github.com/DoDevJutsu/incomprehensible-finder-refactoring-c-sharp)
+* [PHP](https://github.com/CodelyTV/incomprehensible-finder-refactoring-kata)
 
 This port has been developed by [CodelyTV](http://codely.tv/) in order to have it available for the [Software Craftsmanship Barcelona Coding Dojo session](http://www.meetup.com/Barcelona-Software-Craftsmanship/events/233107734/).
 Come with us and have some fun if you're near Barcelona the next Monday, August 22nd!
