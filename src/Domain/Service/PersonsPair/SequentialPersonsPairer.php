@@ -12,7 +12,7 @@ final class SequentialPersonsPairer implements PersonsPairer
         $this->personsPairFactory = $aPersonsPairFactory;
     }
 
-    public function pair(array $allPersons): array
+    public function __invoke(array $allPersons): array
     {
         $allPersonsPairs = [];
 

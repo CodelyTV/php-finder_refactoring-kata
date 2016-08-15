@@ -29,7 +29,7 @@ final class Finder
         PersonsPairCriteria $finderCriteria
     ): PersonsPair
     {
-        $allPersonsPairs = $this->personsPairer->pair($allPersons);
+        $allPersonsPairs = $this->personsPairer->__invoke($allPersons);
 
         $this->validateThereAreEnoughPersonsPairs($allPersonsPairs);
 

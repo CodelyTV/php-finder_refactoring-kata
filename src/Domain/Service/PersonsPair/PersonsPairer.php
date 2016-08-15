@@ -14,5 +14,5 @@ interface PersonsPairer
      *
      * @return PersonsPair[]
      */
-    public function pair(array $allPersons): array;
+    public function __invoke(array $allPersons): array;
 }
