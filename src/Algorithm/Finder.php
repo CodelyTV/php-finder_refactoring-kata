@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace CodelyTV\FinderKata\Algorithm;
 
+use CodelyTV\FinderKata\Domain\Model\PersonsPair\PersonsPairCriteria;
+
 final class Finder
 {
     /** @var Person[] */
@@ -15,14 +17,14 @@ final class Finder
     }
 
     /**
-     * @param FinderCriteria $finderCriteria
+     * @param PersonsPairCriteria $finderCriteria
      *
      * @return PersonsPair The pair of persons matching the specified
      *                     $finderCriteria
      *
      * @throws NotEnoughPersonsException
      */
-    public function find(FinderCriteria $finderCriteria): PersonsPair
+    public function find(PersonsPairCriteria $finderCriteria): PersonsPair
     {
         $allPersonsPairs = $this->pairAllPersons($this->allPersons);
 
@@ -86,34 +88,28 @@ final class Finder
     }
 
     /**
-     * @param FinderCriteria $finderCriteria
-     * @param PersonsPair[]  $allPersonsPairs
+     * @param PersonsPairCriteria $personsPairPriorityCriteria
+     * @param PersonsPair[]       $allPersonsPairs
      *
      * @return PersonsPair
      */
     private function findPersonsPairMatchingCriteria(
-        FinderCriteria $finderCriteria,
+        PersonsPairCriteria $personsPairPriorityCriteria,
         array $allPersonsPairs
     ): PersonsPair
     {
-        $personsPairMatchingCriteria = $allPersonsPairs[0];
+        $bestPersonsPair = $allPersonsPairs[0];
 
-        foreach ($allPersonsPairs as $personsPair) {
-            if ($finderCriteria->isByClosestBirthDates()) {
-                if ($personsPair->birthDaysDistanceInSeconds()
-                    < $personsPairMatchingCriteria->birthDaysDistanceInSeconds()
-                ) {
-                    $personsPairMatchingCriteria = $personsPair;
-                }
-            } elseif ($finderCriteria->isByFurthestBirthDates()) {
-                if ($personsPair->birthDaysDistanceInSeconds()
-                    > $personsPairMatchingCriteria->birthDaysDistanceInSeconds()
-                ) {
-                    $personsPairMatchingCriteria = $personsPair;
-                }
+        foreach ($allPersonsPairs as $personsPairCandidate) {
+            if ($personsPairPriorityCriteria->hasMorePriority(
+                $bestPersonsPair,
+                $personsPairCandidate
+            )
+            ) {
+                $bestPersonsPair = $personsPairCandidate;
             }
         }
 
-        return $personsPairMatchingCriteria;
+        return $bestPersonsPair;
     }
 }
