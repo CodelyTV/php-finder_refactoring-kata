@@ -2,11 +2,18 @@
 
 namespace CodelyTV\FinderKata\Domain\Service\PersonsPair;
 
-use CodelyTV\FinderKata\Algorithm\PersonsPair;
-
 final class SequentialPersonsPairer implements PersonsPairer
 {
-    public function pair(array $allPersons): array {
+    /** @var PersonsPairFactory */
+    private $personsPairFactory;
+
+    public function __construct(PersonsPairFactory $aPersonsPairFactory)
+    {
+        $this->personsPairFactory = $aPersonsPairFactory;
+    }
+
+    public function pair(array $allPersons): array
+    {
         $allPersonsPairs = [];
 
         $numberOfPersons = count($allPersons);
@@ -22,13 +29,10 @@ final class SequentialPersonsPairer implements PersonsPairer
                 $currentPerson = $allPersons[$currentPersonIteration];
                 $personToPair  = $allPersons[$personToPairIteration];
 
-                if ($currentPerson->birthDate() < $personToPair->birthDate()) {
-                    $allPersonsPairs[] =
-                        new PersonsPair($currentPerson, $personToPair);
-                } else {
-                    $allPersonsPairs[] =
-                        new PersonsPair($personToPair, $currentPerson);
-                }
+                $allPersonsPairs[] = $this->personsPairFactory->__invoke(
+                    $currentPerson,
+                    $personToPair
+                );
             }
         }
 

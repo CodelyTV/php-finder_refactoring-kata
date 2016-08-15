@@ -10,6 +10,7 @@ use CodelyTV\FinderKata\Algorithm\Person;
 use CodelyTV\FinderKata\Domain\Model\PersonsPair\ClosestBirthDateCriteria;
 use CodelyTV\FinderKata\Domain\Model\PersonsPair\FurthestBirthDateCriteria;
 use CodelyTV\FinderKata\Domain\Service\PersonsPair\SequentialPersonsPairer;
+use CodelyTV\FinderKata\Domain\Service\PersonsPair\YoungerFirstPersonsPairFactory;
 use PHPUnit\Framework\TestCase;
 
 final class FinderTest extends TestCase
@@ -38,8 +39,10 @@ final class FinderTest extends TestCase
     public function should_throw_not_enough_persons_exception_when_given_empty_list(
     )
     {
-        $sequentialPersonsPairer = new SequentialPersonsPairer();
-        $finder                  = new Finder($sequentialPersonsPairer);
+        $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
+        $sequentialPersonsPairer        =
+            new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
+        $finder                         = new Finder($sequentialPersonsPairer);
 
         $allPersons = [];
 
@@ -53,7 +56,9 @@ final class FinderTest extends TestCase
     /** @test */
     public function should_throw_not_enough_persons_when_given_one_person()
     {
-        $sequentialPersonsPairer = new SequentialPersonsPairer();
+        $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
+        $sequentialPersonsPairer        =
+            new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
         $finder                  = new Finder($sequentialPersonsPairer);
 
         $allPersons = [$this->sue];
@@ -68,7 +73,9 @@ final class FinderTest extends TestCase
     /** @test */
     public function should_return_closest_two_for_two_people()
     {
-        $sequentialPersonsPairer = new SequentialPersonsPairer();
+        $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
+        $sequentialPersonsPairer        =
+            new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
         $finder                  = new Finder($sequentialPersonsPairer);
 
         $allPersons = [$this->sue, $this->greg];
@@ -85,7 +92,9 @@ final class FinderTest extends TestCase
     /** @test */
     public function should_return_furthest_two_for_two_people()
     {
-        $sequentialPersonsPairer = new SequentialPersonsPairer();
+        $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
+        $sequentialPersonsPairer        =
+            new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
         $finder                  = new Finder($sequentialPersonsPairer);
 
         $allPersons = [$this->mike, $this->greg];
@@ -103,7 +112,9 @@ final class FinderTest extends TestCase
     /** @test */
     public function should_return_furthest_two_for_four_people()
     {
-        $sequentialPersonsPairer = new SequentialPersonsPairer();
+        $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
+        $sequentialPersonsPairer        =
+            new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
         $finder                  = new Finder($sequentialPersonsPairer);
 
         $allPersons = [$this->sue, $this->sarah, $this->mike, $this->greg];
@@ -121,11 +132,13 @@ final class FinderTest extends TestCase
     /** @test */
     public function should_return_closest_two_for_four_people()
     {
-        $sequentialPersonsPairer = new SequentialPersonsPairer();
+        $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
+        $sequentialPersonsPairer        =
+            new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
         $finder                  = new Finder($sequentialPersonsPairer);
 
         $allPersons = [$this->sue, $this->sarah, $this->mike, $this->greg];
-        
+
         $closestBirthDatePersonsPairsCriteria = new ClosestBirthDateCriteria();
 
         $personsPairFound =
