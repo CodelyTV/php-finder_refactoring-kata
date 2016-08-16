@@ -7,7 +7,7 @@ namespace CodelyTV\FinderKata\Algorithm;
 use CodelyTV\FinderKata\Domain\Model\PersonsPair\PersonsPairCriteria;
 use CodelyTV\FinderKata\Domain\Service\PersonsPair\PersonsPairer;
 
-final class Finder
+final class BestPersonPairFinder
 {
     /** @var PersonsPairer */
     private $personsPairer;
@@ -24,7 +24,7 @@ final class Finder
      * @return PersonsPair The pair of persons matching the specified
      *                     $finderCriteria
      */
-    public function find(
+    public function __invoke(
         array $allPersons,
         PersonsPairCriteria $finderCriteria
     ): PersonsPair
@@ -46,13 +46,13 @@ final class Finder
      *
      * @return void
      *
-     * @throws NotEnoughPersonsException
+     * @throws NotEnoughPeopleException
      */
     private function validateThereAreEnoughPersonsPairs(array $allPersonsPairs)
     {
         $thereAreNoPersonsPairs = count($allPersonsPairs) < 1;
         if ($thereAreNoPersonsPairs) {
-            throw new NotEnoughPersonsException();
+            throw new NotEnoughPeopleException();
         }
     }
 
