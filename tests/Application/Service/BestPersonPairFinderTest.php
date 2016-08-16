@@ -2,34 +2,34 @@
 
 declare(strict_types = 1);
 
-namespace CodelyTV\FinderKataTest\Algorithm;
+namespace CodelyTV\FinderKataTest\Application\Service;
 
-use CodelyTV\FinderKata\Algorithm\BestPersonPairFinder;
-use CodelyTV\FinderKata\Algorithm\NotEnoughPeopleException;
-use CodelyTV\FinderKata\Algorithm\Person;
-use CodelyTV\FinderKata\Algorithm\PersonsPair;
-use CodelyTV\FinderKata\Domain\Model\PersonsPair\ClosestBirthDateCriteria;
-use CodelyTV\FinderKata\Domain\Model\PersonsPair\FurthestBirthDateCriteria;
-use CodelyTV\FinderKata\Domain\Model\PersonsPair\PersonsPairCriteria;
-use CodelyTV\FinderKata\Domain\Service\PersonsPair\PersonsPairer;
-use CodelyTV\FinderKata\Domain\Service\PersonsPair\SequentialPersonsPairer;
-use CodelyTV\FinderKata\Domain\Service\PersonsPair\YoungerFirstPersonsPairFactory;
+use CodelyTV\FinderKata\Application\Service\BestPeoplePairFinder;
+use CodelyTV\FinderKata\Application\Service\NotEnoughPeopleException;
+use CodelyTV\FinderKata\Domain\Model\PeoplePair;
+use CodelyTV\FinderKata\Domain\Model\PeoplePairCriterion\ClosestBirthDateCriterion;
+use CodelyTV\FinderKata\Domain\Model\PeoplePairCriterion\FurthestBirthDateCriterion;
+use CodelyTV\FinderKata\Domain\Model\PeoplePairCriterion\PeoplePairCriterion;
+use CodelyTV\FinderKata\Domain\Model\Person;
+use CodelyTV\FinderKata\Domain\Service\PeoplePair\YoungerFirstPeoplePairFactory;
+use CodelyTV\FinderKata\Domain\Service\PeoplePairer\PeoplePairer;
+use CodelyTV\FinderKata\Domain\Service\PeoplePairer\SequentialPeoplePairer;
 use CodelyTV\FinderKataTest\Domain\Stub\PersonStub;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
 final class BestPersonPairFinderTest extends TestCase
 {
-    /** @var PersonsPairer|PHPUnit_Framework_MockObject_MockObject */
+    /** @var PeoplePairer|PHPUnit_Framework_MockObject_MockObject */
     private $personsPairer;
 
     /** @var Person[] */
     private $allPersons;
 
-    /** @var PersonsPairCriteria */
+    /** @var PeoplePairCriterion */
     private $personsPairsCriteria;
 
-    /** @var PersonsPair */
+    /** @var PeoplePair */
     private $personsPairFound;
 
     public function tearDown()
@@ -115,14 +115,14 @@ final class BestPersonPairFinderTest extends TestCase
 
     private function havingAPersonsPairer()
     {
-        $this->personsPairer = $this->createMock(PersonsPairer::class);
+        $this->personsPairer = $this->createMock(PeoplePairer::class);
     }
 
     private function havingASequentialPersonsPairer()
     {
-        $youngerFirstPersonsPairFactory = new YoungerFirstPersonsPairFactory();
+        $youngerFirstPersonsPairFactory = new YoungerFirstPeoplePairFactory();
         $this->personsPairer            =
-            new SequentialPersonsPairer($youngerFirstPersonsPairFactory);
+            new SequentialPeoplePairer($youngerFirstPersonsPairFactory);
     }
 
     /*
@@ -156,12 +156,12 @@ final class BestPersonPairFinderTest extends TestCase
 
     private function givenAClosestBirthDateCriteria()
     {
-        $this->personsPairsCriteria = new ClosestBirthDateCriteria();
+        $this->personsPairsCriteria = new ClosestBirthDateCriterion();
     }
 
     private function givenAFurthestBirthDateCriteria()
     {
-        $this->personsPairsCriteria = new FurthestBirthDateCriteria();
+        $this->personsPairsCriteria = new FurthestBirthDateCriterion();
     }
 
     /*
@@ -215,7 +215,7 @@ final class BestPersonPairFinderTest extends TestCase
 
     private function whenFinderIsCalled()
     {
-        $finder = new BestPersonPairFinder($this->personsPairer);
+        $finder = new BestPeoplePairFinder($this->personsPairer);
 
         $this->personsPairFound =
             $finder($this->allPersons, $this->personsPairsCriteria);

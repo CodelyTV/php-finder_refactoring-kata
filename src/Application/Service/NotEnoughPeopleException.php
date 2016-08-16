@@ -1,6 +1,6 @@
 <?php
 
-namespace CodelyTV\FinderKata\Algorithm;
+namespace CodelyTV\FinderKata\Application\Service;
 
 final class NotEnoughPeopleException extends \InvalidArgumentException
 {

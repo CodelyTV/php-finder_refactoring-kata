@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace CodelyTV\FinderKata\Algorithm;
+namespace CodelyTV\FinderKata\Domain\Model;
 
-final class PersonsPair
+final class PeoplePair
 {
     /** @var Person */
     private $person1;

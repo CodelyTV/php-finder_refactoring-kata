@@ -2,7 +2,7 @@
 
 namespace CodelyTV\FinderKataTest\Domain\Stub;
 
-use CodelyTV\FinderKata\Algorithm\Person;
+use CodelyTV\FinderKata\Domain\Model\Person;
 
 final class PersonStub
 {

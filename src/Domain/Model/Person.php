@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace CodelyTV\FinderKata\Algorithm;
+namespace CodelyTV\FinderKata\Domain\Model;
 
 use DateTime;
 
