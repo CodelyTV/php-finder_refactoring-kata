@@ -16,8 +16,5 @@ interface PeoplePairCriterion
      *
      * @return bool
      */
-    public function hasMorePriority(
-        PeoplePair $basePeoplePair,
-        PeoplePair $candidatePeoplePair
-    ): bool;
+    public function hasMorePriority(PeoplePair $basePeoplePair, PeoplePair $candidatePeoplePair) : bool;
 }

@@ -20,27 +20,18 @@ final class BestPeoplePairFinder
     }
 
     /** @throws NotEnoughPeopleException */
-    public function __invoke(
-        People $allPeople,
-        PeoplePairCriterion $peoplePairCriterion
-    ): PeoplePair
+    public function __invoke(People $allPeople, PeoplePairCriterion $peoplePairCriterion): PeoplePair
     {
         $allPeoplePairs = $this->peoplePairer->__invoke($allPeople);
 
-        $this->validateThereAreEnoughPeoplePairs($allPeoplePairs);
+        $this->guardThereAreEnoughPeoplePairs($allPeoplePairs);
 
-        $peoplePairMatchingCriteria = $this->findPeoplePairMatchingCriteria(
-            $peoplePairCriterion,
-            $allPeoplePairs
-        );
-
-        return $peoplePairMatchingCriteria;
+        return $this->findPeoplePairMatchingCriteria($peoplePairCriterion, $allPeoplePairs);
     }
 
-    private function validateThereAreEnoughPeoplePairs(PeoplePairs $allPeoplePairs)
+    private function guardThereAreEnoughPeoplePairs(PeoplePairs $allPeoplePairs)
     {
-        $thereAreNoPeoplePairs = count($allPeoplePairs) < 1;
-        if ($thereAreNoPeoplePairs) {
+        if ($allPeoplePairs->isEmpty()) {
             throw new NotEnoughPeopleException();
         }
     }
@@ -48,8 +39,7 @@ final class BestPeoplePairFinder
     private function findPeoplePairMatchingCriteria(
         PeoplePairCriterion $peoplePairCriterion,
         PeoplePairs $peoplePairs
-    ): PeoplePair
-    {
+    ): PeoplePair {
         $allPeoplePairs = $peoplePairs->all();
 
         $bestPeoplePair = $allPeoplePairs[0];

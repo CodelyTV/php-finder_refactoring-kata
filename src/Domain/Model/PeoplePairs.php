@@ -11,6 +11,11 @@ class PeoplePairs extends Collection
         return $this->items();
     }
 
+    public function isEmpty()
+    {
+        return 0 === $this->count();
+    }
+
     protected function type() : string
     {
         return PeoplePair::class;
