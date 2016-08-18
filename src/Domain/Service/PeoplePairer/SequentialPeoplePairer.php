@@ -2,6 +2,7 @@
 
 namespace CodelyTV\FinderKata\Domain\Service\PeoplePairer;
 
+use CodelyTV\FinderKata\Domain\Model\People;
 use CodelyTV\FinderKata\Domain\Service\PeoplePair\PeoplePairFactory;
 
 final class SequentialPeoplePairer implements PeoplePairer
@@ -14,8 +15,10 @@ final class SequentialPeoplePairer implements PeoplePairer
         $this->peoplePairFactory = $aPeoplePairFactory;
     }
 
-    public function __invoke(array $allPeople): array
+    public function __invoke(People $people): array
     {
+        $allPeople = $people->all();
+
         $allPeoplePairs = [];
 
         $numberOfPeople = count($allPeople);

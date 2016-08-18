@@ -6,14 +6,15 @@ namespace CodelyTV\FinderKataTest\Application\Service;
 
 use CodelyTV\FinderKata\Application\Service\BestPeoplePairFinder;
 use CodelyTV\FinderKata\Application\Service\NotEnoughPeopleException;
+use CodelyTV\FinderKata\Domain\Model\People;
 use CodelyTV\FinderKata\Domain\Model\PeoplePair;
 use CodelyTV\FinderKata\Domain\Model\PeoplePairCriterion\ClosestBirthDateCriterion;
 use CodelyTV\FinderKata\Domain\Model\PeoplePairCriterion\FurthestBirthDateCriterion;
 use CodelyTV\FinderKata\Domain\Model\PeoplePairCriterion\PeoplePairCriterion;
-use CodelyTV\FinderKata\Domain\Model\Person;
 use CodelyTV\FinderKata\Domain\Service\PeoplePair\YoungerFirstPeoplePairFactory;
 use CodelyTV\FinderKata\Domain\Service\PeoplePairer\PeoplePairer;
 use CodelyTV\FinderKata\Domain\Service\PeoplePairer\SequentialPeoplePairer;
+use CodelyTV\FinderKataTest\Domain\Stub\PeopleStub;
 use CodelyTV\FinderKataTest\Domain\Stub\PersonStub;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -22,13 +23,10 @@ final class BestPersonPairFinderTest extends TestCase
 {
     /** @var PeoplePairer|PHPUnit_Framework_MockObject_MockObject */
     private $personsPairer;
-
-    /** @var Person[] */
+    /** @var People */
     private $allPersons;
-
     /** @var PeoplePairCriterion */
     private $personsPairsCriteria;
-
     /** @var PeoplePair */
     private $personsPairFound;
 
@@ -43,8 +41,7 @@ final class BestPersonPairFinderTest extends TestCase
     }
 
     /** @test */
-    public function should_throw_not_enough_persons_exception_when_given_empty_set(
-    )
+    public function should_throw_not_enough_persons_exception_when_given_empty_set()
     {
         $this->havingAPersonsPairer();
 
@@ -57,8 +54,7 @@ final class BestPersonPairFinderTest extends TestCase
     }
 
     /** @test */
-    public function should_throw_not_enough_persons_exception_when_given_one_person(
-    )
+    public function should_throw_not_enough_persons_exception_when_given_one_person()
     {
         $this->havingAPersonsPairer();
 
@@ -131,27 +127,27 @@ final class BestPersonPairFinderTest extends TestCase
 
     private function givenAnEmptySetOfPersons()
     {
-        $this->allPersons = [];
+        $this->allPersons = PeopleStub::withNoOne();
     }
 
     private function givenASetWithOnePerson()
     {
-        $this->allPersons = [PersonStub::from1950()];
+        $this->allPersons = PeopleStub::create(PersonStub::from1950());
     }
 
     private function givenASetWithTwoDifferentPeople()
     {
-        $this->allPersons = [PersonStub::from1950(), PersonStub::from1952()];
+        $this->allPersons = PeopleStub::create(PersonStub::from1950(), PersonStub::from1952());
     }
 
     private function givenAnUnorderedSetWithFourPeople()
     {
-        $this->allPersons = [
+        $this->allPersons = PeopleStub::create(
             PersonStub::from1950(),
             PersonStub::from1982(),
             PersonStub::from1979(),
             PersonStub::from1952()
-        ];
+        );
     }
 
     private function givenAClosestBirthDateCriteria()
@@ -175,12 +171,14 @@ final class BestPersonPairFinderTest extends TestCase
 
     private function thenItReturnsTheTwoGivenPeople()
     {
+        $allPersons = $this->allPersons->all();
+
         $this->assertEquals(
-            $this->allPersons[0],
+            $allPersons[0],
             $this->personsPairFound->person1()
         );
         $this->assertEquals(
-            $this->allPersons[1],
+            $allPersons[1],
             $this->personsPairFound->person2()
         );
     }
@@ -217,7 +215,6 @@ final class BestPersonPairFinderTest extends TestCase
     {
         $finder = new BestPeoplePairFinder($this->personsPairer);
 
-        $this->personsPairFound =
-            $finder($this->allPersons, $this->personsPairsCriteria);
+        $this->personsPairFound = $finder($this->allPersons, $this->personsPairsCriteria);
     }
 }

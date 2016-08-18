@@ -4,14 +4,13 @@ declare(strict_types = 1);
 
 namespace CodelyTV\FinderKata\Application\Service;
 
-use CodelyTV\FinderKata\Domain\Model\Person;
+use CodelyTV\FinderKata\Domain\Model\People;
 use CodelyTV\FinderKata\Domain\Model\PeoplePair;
 use CodelyTV\FinderKata\Domain\Model\PeoplePairCriterion\PeoplePairCriterion;
 use CodelyTV\FinderKata\Domain\Service\PeoplePairer\PeoplePairer;
 
 final class BestPeoplePairFinder
 {
-    /** @var PeoplePairer */
     private $peoplePairer;
 
     public function __construct(PeoplePairer $aPeoplePairer)
@@ -19,15 +18,8 @@ final class BestPeoplePairFinder
         $this->peoplePairer = $aPeoplePairer;
     }
 
-    /**
-     * @param Person[]            $allPeople
-     * @param PeoplePairCriterion $peoplePairCriterion
-     *
-     * @return PeoplePair The pair of persons matching the specified
-     *                     $finderCriteria
-     */
     public function __invoke(
-        array $allPeople,
+        People $allPeople,
         PeoplePairCriterion $peoplePairCriterion
     ): PeoplePair
     {
