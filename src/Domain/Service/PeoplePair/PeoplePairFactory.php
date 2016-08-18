@@ -2,8 +2,8 @@
 
 namespace CodelyTV\FinderKata\Domain\Service\PeoplePair;
 
-use CodelyTV\FinderKata\Domain\Model\Person;
 use CodelyTV\FinderKata\Domain\Model\PeoplePair;
+use CodelyTV\FinderKata\Domain\Model\Person;
 
 interface PeoplePairFactory
 {

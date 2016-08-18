@@ -7,6 +7,7 @@ namespace CodelyTV\FinderKata\Application\Service;
 use CodelyTV\FinderKata\Domain\Model\People;
 use CodelyTV\FinderKata\Domain\Model\PeoplePair;
 use CodelyTV\FinderKata\Domain\Model\PeoplePairCriterion\PeoplePairCriterion;
+use CodelyTV\FinderKata\Domain\Model\PeoplePairs;
 use CodelyTV\FinderKata\Domain\Service\PeoplePairer\PeoplePairer;
 
 final class BestPeoplePairFinder
@@ -18,6 +19,7 @@ final class BestPeoplePairFinder
         $this->peoplePairer = $aPeoplePairer;
     }
 
+    /** @throws NotEnoughPeopleException */
     public function __invoke(
         People $allPeople,
         PeoplePairCriterion $peoplePairCriterion
@@ -35,14 +37,7 @@ final class BestPeoplePairFinder
         return $peoplePairMatchingCriteria;
     }
 
-    /**
-     * @param PeoplePair[] $allPeoplePairs
-     *
-     * @return void
-     *
-     * @throws NotEnoughPeopleException
-     */
-    private function validateThereAreEnoughPeoplePairs(array $allPeoplePairs)
+    private function validateThereAreEnoughPeoplePairs(PeoplePairs $allPeoplePairs)
     {
         $thereAreNoPeoplePairs = count($allPeoplePairs) < 1;
         if ($thereAreNoPeoplePairs) {
@@ -50,17 +45,13 @@ final class BestPeoplePairFinder
         }
     }
 
-    /**
-     * @param PeoplePairCriterion $peoplePairCriterion
-     * @param PeoplePair[]        $allPeoplePairs
-     *
-     * @return PeoplePair
-     */
     private function findPeoplePairMatchingCriteria(
         PeoplePairCriterion $peoplePairCriterion,
-        array $allPeoplePairs
+        PeoplePairs $peoplePairs
     ): PeoplePair
     {
+        $allPeoplePairs = $peoplePairs->all();
+
         $bestPeoplePair = $allPeoplePairs[0];
 
         foreach ($allPeoplePairs as $peoplePairCandidate) {

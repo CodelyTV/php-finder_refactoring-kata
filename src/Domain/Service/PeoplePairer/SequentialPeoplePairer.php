@@ -3,11 +3,11 @@
 namespace CodelyTV\FinderKata\Domain\Service\PeoplePairer;
 
 use CodelyTV\FinderKata\Domain\Model\People;
+use CodelyTV\FinderKata\Domain\Model\PeoplePairs;
 use CodelyTV\FinderKata\Domain\Service\PeoplePair\PeoplePairFactory;
 
 final class SequentialPeoplePairer implements PeoplePairer
 {
-    /** @var PeoplePairFactory */
     private $peoplePairFactory;
 
     public function __construct(PeoplePairFactory $aPeoplePairFactory)
@@ -15,7 +15,7 @@ final class SequentialPeoplePairer implements PeoplePairer
         $this->peoplePairFactory = $aPeoplePairFactory;
     }
 
-    public function __invoke(People $people): array
+    public function __invoke(People $people) : PeoplePairs
     {
         $allPeople = $people->all();
 
@@ -24,12 +24,12 @@ final class SequentialPeoplePairer implements PeoplePairer
         $numberOfPeople = count($allPeople);
 
         for ($currentPersonIteration = 0;
-            $currentPersonIteration < $numberOfPeople;
-            $currentPersonIteration++) {
+             $currentPersonIteration < $numberOfPeople;
+             $currentPersonIteration++) {
 
             for ($personToPairIteration = $currentPersonIteration + 1;
-                $personToPairIteration < $numberOfPeople;
-                $personToPairIteration++) {
+                 $personToPairIteration < $numberOfPeople;
+                 $personToPairIteration++) {
 
                 $currentPerson = $allPeople[$currentPersonIteration];
                 $personToPair  = $allPeople[$personToPairIteration];
@@ -41,6 +41,6 @@ final class SequentialPeoplePairer implements PeoplePairer
             }
         }
 
-        return $allPeoplePairs;
+        return new PeoplePairs($allPeoplePairs);
     }
 }
