@@ -14,7 +14,8 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "CodelyTV\\FinderKata\\": "src/"
+            "CodelyTV\\FinderKata\\": "src/",
+            "CodelyTV\\": "lib/"
         }
     },
     "autoload-dev": {
