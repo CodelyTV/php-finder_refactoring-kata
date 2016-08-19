@@ -62,6 +62,7 @@ You can also find the kata in different programming languages in isolated reposi
 * [Java](https://github.com/DoDevJutsu/incomprehensible-finder-refactoring-java)
 * [C#](https://github.com/DoDevJutsu/incomprehensible-finder-refactoring-c-sharp)
 * [PHP](https://github.com/CodelyTV/incomprehensible-finder-refactoring-kata)
+* [Scala](https://github.com/CodelyTV/incomprehensible-finder-refactoring-kata-scala)
 
 This port has been developed by [CodelyTV](http://codely.tv/) in order to have it available for the [Software Craftsmanship Barcelona Coding Dojo session](http://www.meetup.com/Barcelona-Software-Craftsmanship/events/233107734/).
 Come with us and have some fun if you're near Barcelona the next Monday, August 22nd!
