@@ -9,7 +9,7 @@ You job is to refactor the code and make it readable, while keeping the code in 
 
 # How To Start
 
-1. Clone this repository `git clone https://github.com/CodelyTV/incomprehensible-finder-refactoring-kata`
+1. Clone this repository `git clone https://github.com/CodelyTV/finder-refactoring-kata-php`
 2. Build the docker container which contains all the required dependencies with `make build`
 3. Run the tests with `make test`
 4. Start refactoring! 
@@ -56,13 +56,13 @@ I've decided to port the kata directly to PHP 7 instead of 5.6. This will allow 
 
 # Credits and other programming languages
 
-This kata is a PHP port of [the original Incomprehensible Finder Refactoring Kata](https://github.com/OdeToCode/Katas/tree/master/Refactoring) created by [K. Scott Allen](https://github.com/OdeToCode).
+You can also find the kata in different programming languages in isolated repositories just ready to clone and enjoy:
 
-You can also find the kata in different programming languages in isolated repositories just ready to clone and enjoy: 
-* [Java](https://github.com/DoDevJutsu/incomprehensible-finder-refactoring-java)
-* [C#](https://github.com/DoDevJutsu/incomprehensible-finder-refactoring-c-sharp)
-* [PHP](https://github.com/CodelyTV/incomprehensible-finder-refactoring-kata)
-* [Scala](https://github.com/CodelyTV/incomprehensible-finder-refactoring-kata-scala)
+* 🐘 [PHP](https://github.com/CodelyTV/finder-refactoring-kata-php)
+* 🦈 [C#](https://github.com/CodelyTV/finder-refactoring-kata-csharp)
+* ☕  [Java](https://github.com/DoDevJutsu/incomprehensible-finder-refactoring-java)
+* 🧬 [Scala](https://github.com/CodelyTV/finder-refactoring-kata-scala)
 
-This port has been developed by [CodelyTV](http://codely.tv/) in order to have it available for the [Software Craftsmanship Barcelona Coding Dojo session](http://www.meetup.com/Barcelona-Software-Craftsmanship/events/233107734/).
-Come with us and have some fun if you're near Barcelona the next Monday, August 22nd!
+This kata is a Scala port of [the original Incomprehensible Finder Refactoring Kata](https://github.com/OdeToCode/Katas/tree/master/Refactoring) created by [K. Scott Allen](https://github.com/OdeToCode).
+
+Port developed by [CodelyTV](https://codely.tv/) and [contributors](../../graphs/contributors) 😊
