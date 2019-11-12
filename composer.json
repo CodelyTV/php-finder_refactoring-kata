@@ -8,7 +8,7 @@
     "require-dev": {
         "symfony/var-dumper": "^3.1",
         "phpunit/phpunit": "^5.5",
-        "jakub-onderka/php-parallel-lint": "^0.9"
+        "jakub-onderka/php-parallel-lint": "^1.0"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
